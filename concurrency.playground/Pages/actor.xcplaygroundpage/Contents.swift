@@ -38,6 +38,7 @@ class OutdatedBankAccount {
 actor BankAccount {
     private var transactions: [Transaction.ID : Transaction] = [:]
     private var balance: Double = 0
+    private let id: String = UUID().bankID
     
     func deposit(_ amount: Double) {
         balance += amount
@@ -53,8 +54,15 @@ actor BankAccount {
     }
 }
 
+extension BankAccount: CustomStringConvertible {
+    nonisolated var description: String {
+        "BankAccount id: \(id)."
+    }
+}
+
 // using UnsafeBankAccount will cause a crash over a data race
 let myAccount = BankAccount()
+print(myAccount)
 
 (0..<1000).forEach { _ in
     Task {
